@@ -1,0 +1,63 @@
+// Bundles the extension's TS entry points into dist/ and copies the static files (manifest,
+// HTML/CSS, icons) alongside them - dist/ is what gets loaded unpacked in chrome://extensions
+// or zipped for the Web Store. Mirrors studylife-focus's build.mjs.
+import { build, context } from "esbuild";
+import { mkdirSync, copyFileSync } from "node:fs";
+
+const FONT_FILES = ["dm-sans-latin.woff2", "dm-sans-latin-ext.woff2", "OFL.txt"];
+
+const watch = process.argv.includes("--watch");
+
+mkdirSync("dist", { recursive: true });
+
+const sharedOptions = {
+  bundle: true,
+  outdir: "dist",
+  target: "chrome120",
+  sourcemap: watch ? "inline" : false,
+  minify: !watch,
+};
+
+// All entry points are real ES modules (manifest.json declares "type": "module" for the
+// background service worker; newtab.html and options.html both load their script the same way).
+const moduleBuildOptions = {
+  ...sharedOptions,
+  entryPoints: ["src/background.ts", "src/newtab.ts", "src/options.ts"],
+  format: "esm",
+};
+
+const STATIC_FILES = [
+  "manifest.json",
+  "src/theme.css",
+  "src/newtab.html",
+  "src/newtab.css",
+  "src/options.html",
+  "src/options.css",
+];
+
+function copyStaticFiles() {
+  for (const path of STATIC_FILES) {
+    const dest = `dist/${path.split("/").pop()}`;
+    copyFileSync(path, dest);
+  }
+  for (const size of [16, 48, 128]) {
+    copyFileSync(`src/icon${size}.png`, `dist/icon${size}.png`);
+  }
+  // Self-hosted DM Sans (see theme.css) - the actual font files plus their SIL Open Font
+  // License text, redistributed alongside them as the license requires.
+  mkdirSync("dist/fonts", { recursive: true });
+  for (const file of FONT_FILES) {
+    copyFileSync(`src/fonts/${file}`, `dist/fonts/${file}`);
+  }
+}
+
+if (watch) {
+  const moduleCtx = await context(moduleBuildOptions);
+  await moduleCtx.watch();
+  copyStaticFiles();
+  console.log("Watching for changes...");
+} else {
+  await build(moduleBuildOptions);
+  copyStaticFiles();
+  console.log("Built to dist/");
+}
