@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>StudyLife New Tab settings</title>
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <main>
+    <div class="brand">
+      <img class="brand-icon" src="icon48.png" alt="" />
+      <span class="brand-name">StudyLife New Tab</span>
+    </div>
+
+    <section id="connect-section" class="card">
+      <div class="card-label">Connect to StudyLife</div>
+      <p class="card-desc">
+        Point this at your own self-hosted StudyLife instance. New Tab is read-only - it can show
+        your stats, but it never starts, stops, or changes anything in your account.
+      </p>
+      <div class="row">
+        <input class="input" id="server-url" type="text" placeholder="https://studylife.example.com" />
+      </div>
+      <div class="row">
+        <button id="connect-button" type="button" class="btn-primary">Connect</button>
+      </div>
+      <p id="connect-status" class="status"></p>
+      <p class="hint">
+        "studylife-newtab" needs to be registered once on your server via
+        <strong>studylife-developers</strong> before this works - see the README.
+      </p>
+    </section>
+
+    <section id="connected-section" class="card" hidden>
+      <div class="card-label">Connected</div>
+      <p class="card-desc" id="connected-desc"></p>
+      <div class="row">
+        <button id="disconnect-button" type="button" class="btn-danger">Disconnect</button>
+      </div>
+      <p id="disconnect-status" class="status"></p>
+    </section>
+
+    <section class="card">
+      <div class="card-label">What this extension can see</div>
+      <p class="card-desc">
+        Four narrowly-scoped, read-only permissions: <code>Whoami</code>,
+        <code>TimerState.Get</code>, <code>Metrics.GetSummary</code>, and
+        <code>CourseGoals.GetAll</code>. No write scope is requested - a leaked key from this
+        extension can show your stats to whoever holds it, but cannot change anything in your
+        StudyLife account.
+      </p>
+    </section>
+  </main>
+  <script type="module" src="options.js"></script>
+</body>
+</html>
