@@ -1,0 +1,22 @@
+/* Page-specific layout only - colors/fonts/cards/buttons all come from theme.css. */
+
+main {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+section.card {
+  margin-bottom: 1.25rem;
+}
+
+.row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.row .input {
+  flex: 1;
+}
