@@ -7,8 +7,9 @@
 // spec so a server-side rename fails CI here instead of silently breaking the dashboard once a
 // build reaches users.
 //
-// Read-only surface only (Whoami, TimerState.Get, Metrics.GetSummary, CourseGoals.GetAll) - this
-// is a dashboard, not a control surface, so there is deliberately no write call here.
+// Read-only surface only (Whoami, TimerState.Get, Metrics.GetSummary, CourseGoals.GetAll,
+// Sessions.GetAll, Sessions.GetHistory, Notes.GetAll) - this is a dashboard, not a control
+// surface, so there is deliberately no write call here.
 import { normalizeServerUrl } from "./settings";
 
 // ── GET /api/auth/whoami (WhoamiResponseDto) - used to validate a freshly connected API key and
@@ -34,10 +35,11 @@ export const TIMER_STATE_FIELDS = [
   "serverNow",
 ] as const satisfies readonly (keyof TimerStateDtoPayload)[];
 
-// ── GET /api/metrics/summary (MetricsSummaryDto) - trimmed to the streak and this-week hours
-// tiles. There is no server-side "today's hours" field in MetricsSummaryDto (Hours only carries
-// Week/Month/Total, see StudyLife.Shared/Dtos.cs) - the dashboard's focal number is "hours this
-// week" instead, which is what this endpoint actually, honestly provides. ──
+// ── GET /api/metrics/summary (MetricsSummaryDto) - trimmed to the streak/hours tiles plus the
+// programme-progress numbers (Ects/Topics/AverageGrade). There is no server-side "today's hours"
+// field in MetricsSummaryDto (Hours only carries Week/Month/Total, see StudyLife.Shared/Dtos.cs) -
+// the dashboard's focal number is "hours this week" instead, which is what this endpoint
+// actually, honestly provides. ──
 export interface MetricsStreakDtoPayload {
   current: number;
   longest: number;
@@ -45,18 +47,39 @@ export interface MetricsStreakDtoPayload {
 export interface MetricsHoursDtoPayload {
   week: number;
 }
+export interface MetricsEctsDtoPayload {
+  earned: number;
+  total: number;
+}
+export interface MetricsTopicsDtoPayload {
+  completed: number;
+  total: number;
+}
 export interface MetricsSummaryDtoPayload {
   asOf: string;
   streak: MetricsStreakDtoPayload;
   hours: MetricsHoursDtoPayload;
+  ects: MetricsEctsDtoPayload;
+  averageGrade: number | null;
+  topics: MetricsTopicsDtoPayload;
 }
-export const METRICS_SUMMARY_FIELDS = ["asOf", "streak", "hours"] as const satisfies readonly (keyof MetricsSummaryDtoPayload)[];
+export const METRICS_SUMMARY_FIELDS = [
+  "asOf",
+  "streak",
+  "hours",
+  "ects",
+  "averageGrade",
+  "topics",
+] as const satisfies readonly (keyof MetricsSummaryDtoPayload)[];
 export const METRICS_STREAK_FIELDS = ["current", "longest"] as const satisfies readonly (keyof MetricsStreakDtoPayload)[];
 export const METRICS_HOURS_FIELDS = ["week"] as const satisfies readonly (keyof MetricsHoursDtoPayload)[];
+export const METRICS_ECTS_FIELDS = ["earned", "total"] as const satisfies readonly (keyof MetricsEctsDtoPayload)[];
+export const METRICS_TOPICS_FIELDS = ["completed", "total"] as const satisfies readonly (keyof MetricsTopicsDtoPayload)[];
 
 // ── GET /api/coursegoals (CourseGoalDto[]) - the full list, so the dashboard can find the
-// nearest open deadline itself rather than relying on metrics/summary's separately-cached,
-// 5-item-capped upcomingCourseGoals projection. Mirrors studylife-raycast's courseGoals.ts. ──
+// nearest open deadline (and the panel below it several more) itself rather than relying on
+// metrics/summary's separately-cached, 5-item-capped upcomingCourseGoals projection. Mirrors
+// studylife-raycast's courseGoals.ts. ──
 export interface CourseGoalDtoPayload {
   courseId: number;
   courseName: string;
@@ -69,6 +92,46 @@ export const COURSE_GOAL_FIELDS = [
   "targetDate",
   "completedAt",
 ] as const satisfies readonly (keyof CourseGoalDtoPayload)[];
+
+// ── GET /api/sessions (Sessions.GetAll, StudySessionDto[]) - the full, UNBOUNDED session list
+// (StudyLife.Server/Services/SessionService.cs's LoadAllAsync: "No date bounds - the client
+// fetches this once and does all week/day navigation itself"), which is what makes a genuine
+// "upcoming sessions" section possible in the first place: a row can carry a StartTime in the
+// future (planned via the calendar or the exam planner), it is not exclusively past/completed
+// data. Filtered/sorted client-side by dashboard.ts's upcomingSessions(). ──
+// ── GET /api/sessions/history (Sessions.GetHistory, StudySessionDto[]) - the long-term history
+// endpoint, called here with onlyCompleted=true for a genuine "what did I actually study
+// recently" timeline, distinct in both meaning and shape from the forward-looking GetAll list
+// above (see dashboard.ts's recentSessions()). ──
+export interface StudySessionDtoPayload {
+  courseId: number;
+  courseName: string;
+  courseColor: string;
+  startTime: string;
+  endTime: string;
+  topic: string | null;
+  isCompleted: boolean;
+}
+export const STUDY_SESSION_FIELDS = [
+  "courseId",
+  "courseName",
+  "courseColor",
+  "startTime",
+  "endTime",
+  "topic",
+  "isCompleted",
+] as const satisfies readonly (keyof StudySessionDtoPayload)[];
+
+// ── GET /api/notes (Notes.GetAll, NoteDto[]) - only the fields needed for a short recent-notes
+// list (title, a one-line snippet, and when it was last touched). ──
+export interface NoteDtoPayload {
+  id: number;
+  title: string;
+  content: string;
+  updatedAt: string;
+  summary: string | null;
+}
+export const NOTE_FIELDS = ["id", "title", "content", "updatedAt", "summary"] as const satisfies readonly (keyof NoteDtoPayload)[];
 
 // A network round trip that hangs forever (unreachable server, no TCP reset) would otherwise
 // leave the new tab page stuck on its loading state indefinitely.
@@ -121,6 +184,25 @@ export function fetchMetricsSummary(settings: ConnectedSettings): Promise<ApiRes
 
 export function fetchCourseGoals(settings: ConnectedSettings): Promise<ApiResult<{ data: CourseGoalDtoPayload[] }>> {
   return getJson<CourseGoalDtoPayload[]>(settings, "/api/coursegoals");
+}
+
+export function fetchSessions(settings: ConnectedSettings): Promise<ApiResult<{ data: StudySessionDtoPayload[] }>> {
+  return getJson<StudySessionDtoPayload[]>(settings, "/api/sessions");
+}
+
+/** days/onlyCompleted are query params, not JSON body fields, so they need no *_FIELDS entry for
+ *  contract-check.mjs. onlyCompleted=true keeps this call to a genuine "what was actually
+ *  studied" timeline (see SessionsController.GetHistory's doc comment) instead of also pulling in
+ *  not-yet-completed rows that fetchSessions() above already covers for the upcoming panel. */
+export function fetchSessionHistory(
+  settings: ConnectedSettings,
+  days = 14,
+): Promise<ApiResult<{ data: StudySessionDtoPayload[] }>> {
+  return getJson<StudySessionDtoPayload[]>(settings, `/api/sessions/history?days=${days}&onlyCompleted=true`);
+}
+
+export function fetchNotes(settings: ConnectedSettings): Promise<ApiResult<{ data: NoteDtoPayload[] }>> {
+  return getJson<NoteDtoPayload[]>(settings, "/api/notes");
 }
 
 export type ExchangeResult =

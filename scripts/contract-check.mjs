@@ -20,6 +20,12 @@ const ROUTES = [
   { path: "/api/timerstate", method: "get", schema: "TimerStateDto", fieldsConst: "TIMER_STATE_FIELDS" },
   { path: "/api/metrics/summary", method: "get", schema: "MetricsSummaryDto", fieldsConst: "METRICS_SUMMARY_FIELDS" },
   { path: "/api/coursegoals", method: "get", schema: "CourseGoalDto", fieldsConst: "COURSE_GOAL_FIELDS" },
+  // Sessions.GetAll (unbounded list - powers the "Upcoming sessions" panel) and
+  // Sessions.GetHistory (powers "Recent activity") both return the same StudySessionDto shape,
+  // so they share STUDY_SESSION_FIELDS - only the route/method differ.
+  { path: "/api/sessions", method: "get", schema: "StudySessionDto", fieldsConst: "STUDY_SESSION_FIELDS" },
+  { path: "/api/sessions/history", method: "get", schema: "StudySessionDto", fieldsConst: "STUDY_SESSION_FIELDS" },
+  { path: "/api/notes", method: "get", schema: "NoteDto", fieldsConst: "NOTE_FIELDS" },
   { path: "/api/auth/assertion-exchange", method: "post", schema: null, fieldsConst: null },
 ];
 
@@ -28,6 +34,8 @@ const ROUTES = [
 const NESTED_SCHEMAS = [
   { schema: "MetricsStreakDto", fieldsConst: "METRICS_STREAK_FIELDS" },
   { schema: "MetricsHoursDto", fieldsConst: "METRICS_HOURS_FIELDS" },
+  { schema: "MetricsEctsDto", fieldsConst: "METRICS_ECTS_FIELDS" },
+  { schema: "MetricsTopicsDto", fieldsConst: "METRICS_TOPICS_FIELDS" },
 ];
 
 async function main() {

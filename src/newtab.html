@@ -17,8 +17,8 @@
       <img class="brand-icon-large" src="icon128.png" alt="" />
       <h1>StudyLife New Tab</h1>
       <p class="lead">
-        Connect your self-hosted StudyLife account to see today's hours, your streak, and your
-        next course-goal deadline every time you open a tab.
+        Connect your self-hosted StudyLife account to see your hours, streak, upcoming sessions,
+        course goals, programme progress, and recent notes every time you open a tab.
       </p>
       <a id="connect-link" class="btn-primary" href="options.html" target="_blank" rel="noopener">Connect</a>
     </div>
@@ -58,6 +58,43 @@
             <div id="goal-sub" class="tile-sub"></div>
           </div>
         </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <section class="card panel">
+          <h2 class="panel-title">Upcoming sessions</h2>
+          <ul id="upcoming-list" class="entry-list"></ul>
+          <p id="upcoming-empty" class="empty-hint" hidden>
+            Nothing scheduled - plan a session or generate an exam plan in StudyLife.
+          </p>
+          <p id="upcoming-error" class="empty-hint error" hidden></p>
+        </section>
+
+        <section class="card panel">
+          <h2 class="panel-title">Recent activity</h2>
+          <ul id="recent-list" class="entry-list"></ul>
+          <p id="recent-empty" class="empty-hint" hidden>No completed sessions in the last two weeks.</p>
+          <p id="recent-error" class="empty-hint error" hidden></p>
+        </section>
+
+        <section class="card panel">
+          <h2 class="panel-title">Course goal deadlines</h2>
+          <ul id="goals-list" class="entry-list"></ul>
+          <p id="goals-empty" class="empty-hint" hidden>No open course goals with a deadline.</p>
+          <p id="goals-error" class="empty-hint error" hidden></p>
+        </section>
+
+        <section class="card panel">
+          <h2 class="panel-title">Programme progress</h2>
+          <div id="progress-body" class="progress-body"></div>
+        </section>
+
+        <section class="card panel">
+          <h2 class="panel-title">Recent notes</h2>
+          <ul id="notes-list" class="entry-list"></ul>
+          <p id="notes-empty" class="empty-hint" hidden>No notes yet.</p>
+          <p id="notes-error" class="empty-hint error" hidden></p>
+        </section>
       </div>
 
       <footer class="dash-footer">

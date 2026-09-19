@@ -1,13 +1,20 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   COURSE_GOAL_FIELDS,
+  METRICS_ECTS_FIELDS,
   METRICS_HOURS_FIELDS,
   METRICS_STREAK_FIELDS,
   METRICS_SUMMARY_FIELDS,
+  METRICS_TOPICS_FIELDS,
+  NOTE_FIELDS,
+  STUDY_SESSION_FIELDS,
   TIMER_STATE_FIELDS,
   WHOAMI_FIELDS,
   exchangeAssertion,
   fetchMetricsSummary,
+  fetchNotes,
+  fetchSessionHistory,
+  fetchSessions,
   fetchWhoami,
 } from "../src/api";
 
@@ -30,10 +37,22 @@ describe("field constants (contract-check.mjs diffs these against the OpenAPI sp
   it("are all non-empty and contain the fields the dashboard actually reads", () => {
     expect(WHOAMI_FIELDS).toEqual(["userId", "credential"]);
     expect(TIMER_STATE_FIELDS).toContain("isRunning");
-    expect(METRICS_SUMMARY_FIELDS).toEqual(["asOf", "streak", "hours"]);
+    expect(METRICS_SUMMARY_FIELDS).toEqual(["asOf", "streak", "hours", "ects", "averageGrade", "topics"]);
     expect(METRICS_STREAK_FIELDS).toEqual(["current", "longest"]);
     expect(METRICS_HOURS_FIELDS).toEqual(["week"]);
+    expect(METRICS_ECTS_FIELDS).toEqual(["earned", "total"]);
+    expect(METRICS_TOPICS_FIELDS).toEqual(["completed", "total"]);
     expect(COURSE_GOAL_FIELDS).toEqual(["courseId", "courseName", "targetDate", "completedAt"]);
+    expect(STUDY_SESSION_FIELDS).toEqual([
+      "courseId",
+      "courseName",
+      "courseColor",
+      "startTime",
+      "endTime",
+      "topic",
+      "isCompleted",
+    ]);
+    expect(NOTE_FIELDS).toEqual(["id", "title", "content", "updatedAt", "summary"]);
   });
 });
 
@@ -82,6 +101,52 @@ describe("fetchMetricsSummary", () => {
   it("reports an http failure for a non-2xx, non-401/403 status", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({}, 500)));
     await expect(fetchMetricsSummary(settings)).resolves.toEqual({ ok: false, kind: "http", status: 500 });
+  });
+});
+
+describe("fetchSessions", () => {
+  it("hits /api/sessions and returns the parsed body", async () => {
+    const body = [{ courseId: 1, courseName: "Math", courseColor: "#123", startTime: "2026-09-20T10:00:00", endTime: "2026-09-20T11:00:00", topic: null, isCompleted: false }];
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(body));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchSessions(settings)).resolves.toEqual({ ok: true, data: body });
+    expect((fetchMock.mock.calls[0] as [string])[0]).toBe("https://studylife.example.com/api/sessions");
+  });
+});
+
+describe("fetchSessionHistory", () => {
+  it("hits /api/sessions/history with onlyCompleted=true and the default days window", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse([]));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await fetchSessionHistory(settings);
+
+    expect((fetchMock.mock.calls[0] as [string])[0]).toBe(
+      "https://studylife.example.com/api/sessions/history?days=14&onlyCompleted=true",
+    );
+  });
+
+  it("accepts a custom days window", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse([]));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await fetchSessionHistory(settings, 30);
+
+    expect((fetchMock.mock.calls[0] as [string])[0]).toBe(
+      "https://studylife.example.com/api/sessions/history?days=30&onlyCompleted=true",
+    );
+  });
+});
+
+describe("fetchNotes", () => {
+  it("hits /api/notes and returns the parsed body", async () => {
+    const body = [{ id: 1, title: "Note", content: "Content", updatedAt: "2026-09-19T10:00:00", summary: null }];
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(body));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchNotes(settings)).resolves.toEqual({ ok: true, data: body });
+    expect((fetchMock.mock.calls[0] as [string])[0]).toBe("https://studylife.example.com/api/notes");
   });
 });
 
