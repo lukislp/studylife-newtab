@@ -1,0 +1,188 @@
+/* Page-specific layout only - colors/fonts come from theme.css (StudyLife's own design tokens,
+   copied verbatim - see README). This page deliberately stays calm and quiet (Momentum/Tabliss
+   style): one focal number, two small tiles, nothing that moves or demands attention. */
+
+html, body {
+  height: 100%;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+}
+
+.state {
+  width: 100%;
+  max-width: 30rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+/* === Loading === */
+.spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid var(--border2);
+  border-top-color: var(--accent);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.loading-text {
+  color: var(--text3);
+  font-size: 0.85rem;
+}
+
+/* === Not connected === */
+.brand-icon-large {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-bottom: 0.25rem;
+}
+#state-not-connected h1,
+#state-error h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.lead {
+  color: var(--text2);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 26rem;
+}
+
+/* === Error === */
+.error-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+/* === Dashboard === */
+#state-dashboard {
+  gap: 1.75rem;
+}
+
+.dash-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 1.6rem;
+}
+.greeting {
+  font-size: 0.95rem;
+  color: var(--text2);
+  margin: 0;
+}
+.live-badge {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--success);
+  background: rgba(0, 184, 148, 0.12);
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+}
+.live-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+.focal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+.focal-number {
+  font-size: 4.5rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.focal-label {
+  font-size: 0.85rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tiles {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.tile {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-align: left;
+}
+.tile-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.tile-body {
+  min-width: 0;
+}
+.tile-value {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tile-sub {
+  font-size: 0.76rem;
+  color: var(--text3);
+  margin-top: 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dash-footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text3);
+}
+.settings-link {
+  color: var(--text3);
+}
+.settings-link:hover {
+  color: var(--text2);
+}
