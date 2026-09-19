@@ -1,6 +1,8 @@
 /* Page-specific layout only - colors/fonts come from theme.css (StudyLife's own design tokens,
    copied verbatim - see README). This page deliberately stays calm and quiet (Momentum/Tabliss
-   style): one focal number, two small tiles, nothing that moves or demands attention. */
+   style): a big focal number up top, nothing that moves or demands attention - but on a large
+   New Tab viewport it also genuinely uses the space instead of leaving most of it empty, via the
+   panel grid below the hero (see .dashboard-grid). */
 
 html, body {
   height: 100%;
@@ -11,7 +13,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1.25rem;
+  padding: 2.5rem 2rem;
 }
 
 .state {
@@ -22,6 +24,19 @@ html, body {
   align-items: center;
   text-align: center;
   gap: 1rem;
+}
+
+/* The dashboard state alone is wide and top-aligned (not vertically centered like the narrow
+   loading/not-connected/error states above) - it has real content below the fold on most
+   screens, so centering it would push its first row half off-screen. align-self overrides just
+   this one flex item's cross-axis position within #app; #app's own justify-content:center still
+   horizontally centers it. */
+#state-dashboard {
+  max-width: 76rem;
+  align-self: flex-start;
+  align-items: stretch;
+  text-align: left;
+  margin: 0.5rem auto 0;
 }
 
 /* === Loading === */
@@ -185,4 +200,143 @@ html, body {
 }
 .settings-link:hover {
   color: var(--text2);
+}
+
+/* === Panel grid (upcoming sessions / recent activity / goals / progress / notes) === */
+.dashboard-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.1rem;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  text-align: left;
+}
+
+.panel-title {
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin: 0;
+}
+
+.entry-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.entry-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 0.35rem;
+}
+
+.entry-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.entry-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entry-sub {
+  font-size: 0.76rem;
+  color: var(--text3);
+  margin-top: 0.1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.empty-hint {
+  font-size: 0.8rem;
+  color: var(--text3);
+  margin: 0;
+}
+.empty-hint.error {
+  color: var(--error);
+}
+
+/* === Programme progress (ECTS / topics bars) === */
+.progress-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.progress-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.progress-row-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--text2);
+  gap: 0.5rem;
+}
+.progress-row-head span:last-child {
+  color: var(--text3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.progress-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--bg3);
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width var(--transition);
+}
+
+.progress-grade {
+  font-size: 0.82rem;
+  color: var(--text2);
+  margin: 0;
+}
+
+/* Narrower viewports (a smaller browser window, not the usual full-screen New Tab) still get a
+   single, comfortably readable column instead of the grid's minmax(300px, ...) tracks squeezing
+   awkwardly. */
+@media (max-width: 640px) {
+  #state-dashboard {
+    max-width: 30rem;
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
 }
