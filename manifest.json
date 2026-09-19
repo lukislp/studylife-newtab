@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "StudyLife New Tab",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Replaces the New Tab page with your StudyLife stats: hours this week, streak, and the next course-goal deadline.",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1pw50i/+Pz9CJ6+xNwFhnTTpBZtmeKx/8/LGLexG/1BIICBd2umnCP03jFnF5+sjoHAhoN8ZQunf8tt8yxUTYJ6MqDvwxyVHyqoaPcaegOaTJUHiqWIpMlbdmEXP5B3EqXKXAjL5WfX1EBglgNQcpIQJsJd5nx92iUYXfFY3snGUohRDw4ZNm0LOs2mSM3HH/M+piae23hv6c5Htm6CYdF75k8OdprT+ZRUaHuvbAjz/jHtDINajl8aqmu/8usR6+ovsd18Pqv6NpBy9KPbtHejGlbl6lilAeHnFaNxb9uamzM6xs/cWE1rz9a0CMhZlqu85RzxA6BG6o0Nq5eTBfwIDAQAB",
   "permissions": [
