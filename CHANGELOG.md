@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/lukislp/studylife-newtab/compare/v1.1.0...v1.1.1) (2026-09-19)
+
+
+### Bug Fixes
+
+* **deps:** bump the dev group across 1 directory with 2 updates ([#2](https://github.com/lukislp/studylife-newtab/issues/2)) ([be8f203](https://github.com/lukislp/studylife-newtab/commit/be8f20305ebcfc3cf150394863f7acb801e6669f))
+
 # [1.1.0](https://github.com/lukislp/studylife-newtab/compare/v1.0.0...v1.1.0) (2026-09-19)
 
 
