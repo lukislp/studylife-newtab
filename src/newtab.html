@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>New Tab</title>
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="newtab.css" />
+</head>
+<body>
+  <main id="app">
+    <div id="state-loading" class="state">
+      <div class="spinner" aria-hidden="true"></div>
+      <p class="loading-text">Loading your StudyLife stats&hellip;</p>
+    </div>
+
+    <div id="state-not-connected" class="state" hidden>
+      <img class="brand-icon-large" src="icon128.png" alt="" />
+      <h1>StudyLife New Tab</h1>
+      <p class="lead">
+        Connect your self-hosted StudyLife account to see today's hours, your streak, and your
+        next course-goal deadline every time you open a tab.
+      </p>
+      <a id="connect-link" class="btn-primary" href="options.html" target="_blank" rel="noopener">Connect</a>
+    </div>
+
+    <div id="state-error" class="state" hidden>
+      <h1 id="error-title">Couldn't load your stats</h1>
+      <p class="lead" id="error-message"></p>
+      <div class="error-actions">
+        <button id="retry-button" type="button" class="btn-primary">Try again</button>
+        <a class="btn-secondary" href="options.html" target="_blank" rel="noopener">Open settings</a>
+      </div>
+    </div>
+
+    <div id="state-dashboard" class="state" hidden>
+      <header class="dash-header">
+        <p id="greeting" class="greeting"></p>
+        <span id="live-badge" class="live-badge" hidden>Studying now</span>
+      </header>
+
+      <div class="focal">
+        <span id="focal-number" class="focal-number">0</span>
+        <span class="focal-label">hrs this week</span>
+      </div>
+
+      <div class="tiles">
+        <div class="tile">
+          <span class="tile-icon" aria-hidden="true">&#128293;</span>
+          <div class="tile-body">
+            <div id="streak-value" class="tile-value">No streak yet</div>
+            <div id="streak-sub" class="tile-sub"></div>
+          </div>
+        </div>
+        <div class="tile">
+          <span class="tile-icon" aria-hidden="true">&#127919;</span>
+          <div class="tile-body">
+            <div id="goal-value" class="tile-value">No upcoming goals</div>
+            <div id="goal-sub" class="tile-sub"></div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="dash-footer">
+        <span id="as-of"></span>
+        <a href="options.html" target="_blank" rel="noopener" class="settings-link">Settings</a>
+      </footer>
+    </div>
+  </main>
+  <script type="module" src="newtab.js"></script>
+</body>
+</html>
