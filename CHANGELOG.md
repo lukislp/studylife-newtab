@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/lukislp/studylife-newtab/compare/v1.1.2...v1.1.3) (2026-09-20)
+
+
+### Bug Fixes
+
+* **ci:** correct missing Harden Runner allowlist ports (github.com:22, crl:80) ([#8](https://github.com/lukislp/studylife-newtab/issues/8)) ([e3f80f0](https://github.com/lukislp/studylife-newtab/commit/e3f80f01b48b7daaa9bed6ce69793c64748cf1bf))
+
 ## [1.1.2](https://github.com/lukislp/studylife-newtab/compare/v1.1.1...v1.1.2) (2026-09-20)
 
 
