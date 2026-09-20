@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/lukislp/studylife-newtab/compare/v1.1.1...v1.1.2) (2026-09-20)
+
+
+### Bug Fixes
+
+* **ci:** add Harden Runner in audit mode to every job ([#6](https://github.com/lukislp/studylife-newtab/issues/6)) ([92c6641](https://github.com/lukislp/studylife-newtab/commit/92c66413273a18614f782b746749ccfdedd08ffc))
+
 ## [1.1.1](https://github.com/lukislp/studylife-newtab/compare/v1.1.0...v1.1.1) (2026-09-19)
 
 
