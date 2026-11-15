@@ -112,7 +112,7 @@ async function renderDashboard(settings: ConnectedSettings): Promise<void> {
 
   greetingEl.textContent = greetingForHour(new Date().getHours());
   focalNumber.textContent = formatHours(summary.data.hours.week);
-  asOfEl.textContent = `Updated ${serverTimeOfDay(summary.data.asOf)} (StudyLife server time)`;
+  asOfEl.textContent = `Updated ${serverTimeOfDay(summary.data.asOf)} (StudyAtrium server time)`;
 
   const streak = summary.data.streak;
   if (streak.current > 0) {
@@ -303,7 +303,7 @@ function describeApiFailure(failure: ApiFailure): string {
     case "offline":
       return "You're offline - your stats will load once you're back online.";
     case "unauthorized":
-      return "StudyLife rejected the stored key - open Settings and connect again.";
+      return "StudyAtrium rejected the stored key - open Settings and connect again.";
     case "http":
       return `The server returned an error (HTTP ${failure.status}).`;
     case "network":

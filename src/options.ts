@@ -70,7 +70,7 @@ async function onConnectClick(): Promise<void> {
     // chrome.permissions.onAdded listener picks the marker up and finishes the flow regardless
     // of whether this page survives the prompt.
     await setPendingConnect(serverUrl);
-    setStatus(connectStatus, "Grant the permission prompt - StudyLife's login page then opens automatically.", "success");
+    setStatus(connectStatus, "Grant the permission prompt - StudyAtrium's login page then opens automatically.", "success");
     const granted = await requestHostPermission([originPattern]);
     if (!granted) {
       await clearPendingConnect();
