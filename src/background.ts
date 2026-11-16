@@ -112,9 +112,9 @@ async function handleConnectRequest(rawServerUrl: string): Promise<ConnectResult
 
 function finishConnect(result: ConnectResult): ConnectResult {
   if (result.ok) {
-    notify("Connected to StudyLife", `New Tab is now showing stats from ${result.serverUrl}.`);
+    notify("Connected to StudyAtrium", `New Tab is now showing stats from ${result.serverUrl}.`);
   } else {
-    notify("StudyLife connect failed", describeConnectResult(result));
+    notify("StudyAtrium connect failed", describeConnectResult(result));
   }
   return result;
 }

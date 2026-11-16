@@ -1,13 +1,13 @@
-# Privacy Policy - StudyLife New Tab
+# Privacy Policy - StudyAtrium New Tab
 
-StudyLife New Tab is a browser extension for a self-hosted
-[StudyLife](https://github.com/lukislp/studylife) instance. There is no vendor server involved -
-your data goes at most two places: your own StudyLife server, and your own device's local browser
+StudyAtrium New Tab is a browser extension for a self-hosted
+[StudyAtrium](https://github.com/lukislp/studylife) instance. There is no vendor server involved -
+your data goes at most two places: your own StudyAtrium server, and your own device's local browser
 storage.
 
 ## What this extension reads
 
-Every time you open a new tab, it makes four read-only calls to the StudyLife server you
+Every time you open a new tab, it makes four read-only calls to the StudyAtrium server you
 configured, using one API key scoped to exactly these four capabilities and nothing else (see the
 `studylife` repo's `ApiKeyScopes` for the server-enforced scope):
 
@@ -19,14 +19,14 @@ configured, using one API key scoped to exactly these four capabilities and noth
 - **`GET /api/coursegoals`** - your course goals, to find and show the nearest upcoming deadline.
 
 No other endpoint is ever called. This extension has no write scope at all - the key it holds
-cannot start, stop, or change anything in your StudyLife account, even if it wanted to.
+cannot start, stop, or change anything in your StudyAtrium account, even if it wanted to.
 
 ## What this extension stores
 
 Locally, in the browser's own extension storage, never transmitted anywhere except back to the
-StudyLife server you configured:
+StudyAtrium server you configured:
 
-- Your StudyLife server's base URL.
+- Your StudyAtrium server's base URL.
 - Your API key (obtained via the passkey-backed browser-consent connect flow - you never see or
   copy/paste it yourself).
 
@@ -37,7 +37,7 @@ fetches fresh data, and a fetch that fails shows an explicit error state rather 
 
 - Never collects analytics, telemetry, or crash reports.
 - Never contacts any server other than the one you explicitly configure.
-- Never writes anything to your StudyLife account - the API key is read-only by server-side
+- Never writes anything to your StudyAtrium account - the API key is read-only by server-side
   design (no write scope is ever requested), and this extension has no UI to write anything even
   if it held one.
 - Never shows stale data as if it were live - a failed request always says so.
