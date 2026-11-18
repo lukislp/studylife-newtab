@@ -1,4 +1,4 @@
-// Guards against StudyLife's server-side DTOs drifting out from under this extension's
+// Guards against StudyAtrium's server-side DTOs drifting out from under this extension's
 // hand-mirrored payload types (src/api.ts) without anyone noticing until a build reaches users
 // with the dashboard already silently broken - the server ignores unknown/misspelled field names
 // instead of erroring, so a wrong field name is a green build and a tile that quietly shows

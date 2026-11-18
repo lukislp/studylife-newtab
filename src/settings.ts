@@ -1,5 +1,5 @@
 // Self-hosted, so unlike a typical extension there's no single fixed API host - every user points
-// this at their own StudyLife instance. Only the BASE URL is ever stored - every API call appends
+// this at their own StudyAtrium instance. Only the BASE URL is ever stored - every API call appends
 // its own path (see api.ts), never the other way around, so the user never has to think about
 // paths at all. Mirrors studylife-focus's settings.ts, trimmed to this extension's single
 // generic-flow API key (no per-feature key split - there is only one audience here).
