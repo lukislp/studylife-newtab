@@ -19,8 +19,8 @@ export function formatHours(hours: number): string {
 }
 
 /**
- * Days between a naive-local StudyLife date-time and "today", both anchored to calendar dates
- * (not wall-clock instants). StudyLife's DateTimes carry no offset and are naive Europe/Berlin
+ * Days between a naive-local StudyAtrium date-time and "today", both anchored to calendar dates
+ * (not wall-clock instants). StudyAtrium's DateTimes carry no offset and are naive Europe/Berlin
  * local time (see MetricsSummaryDto.AsOf's doc comment in the server source), so the target's
  * calendar date is read straight off its YYYY-MM-DD prefix - no reinterpretation needed. "Today"
  * is different: `nowMs` is a real instant, so it DOES need converting - explicitly to
@@ -82,7 +82,7 @@ export function nextOpenGoal(goals: readonly CourseGoalDtoPayload[], nowMs: numb
 }
 
 /**
- * "14:32" read straight off a naive-local StudyLife timestamp's own digits - deliberately NOT
+ * "14:32" read straight off a naive-local StudyAtrium timestamp's own digits - deliberately NOT
  * routed through `new Date(...)`, which would reinterpret an offset-less string as this browser's
  * local zone (wrong: it is Europe/Berlin, see daysUntil's doc comment above) and silently show
  * the wrong clock time on any device not itself set to Europe/Berlin. Substring extraction has no
@@ -96,7 +96,7 @@ export function serverTimeOfDay(isoLike: string): string {
 /**
  * "Today" / "Tomorrow" / "Yesterday" / "Fri, Sep 25" - a calendar-date-only label shared by the
  * session and note lists below. Reads the date straight off the string's own digits (via
- * daysUntil/dateParts), for the same reason daysUntil itself does: StudyLife's timestamps are
+ * daysUntil/dateParts), for the same reason daysUntil itself does: StudyAtrium's timestamps are
  * naive Europe/Berlin local time, and going through `new Date(isoLike)` would reinterpret them as
  * this browser's own local zone instead (see daysUntil's doc comment). The weekday/month name is
  * then read back out through a neutral UTC formatting of that same Y/M/D triple - never through
@@ -120,7 +120,7 @@ export function sessionDurationHours(startTime: string, endTime: string): number
 }
 
 /**
- * "2026-09-19T14:32:07" - the given instant reformatted into StudyLife's own naive-local
+ * "2026-09-19T14:32:07" - the given instant reformatted into StudyAtrium's own naive-local
  * (Europe/Berlin) wire shape, so it can be compared lexically against raw StartTime/EndTime
  * string values directly: both are the same fixed-width, zero-padded "YYYY-MM-DDTHH:MM:SS" shape
  * in the same zone, so string order already matches chronological order - no Date parsing of the
@@ -151,7 +151,7 @@ export interface UpcomingSessionEntry {
 }
 
 /**
- * Sessions with a StartTime still ahead of "now" and not yet completed - StudyLife's session list
+ * Sessions with a StartTime still ahead of "now" and not yet completed - StudyAtrium's session list
  * genuinely can hold future-dated rows: GET /api/sessions is unbounded (see
  * StudyLife.Server/Services/SessionService.cs's LoadAllAsync, "No date bounds - the client
  * fetches this once and does all week/day navigation itself"), populated either by manually

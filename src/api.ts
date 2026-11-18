@@ -216,7 +216,7 @@ export type ExchangeResult =
 
 // Trades the passkey-signed assertion from the browser consent flow
 // (chrome.identity.launchWebAuthFlow, see connect.ts/background.ts) for this client's API key -
-// the server-side counterpart is POST /api/auth/assertion-exchange (StudyLife's AuthController,
+// the server-side counterpart is POST /api/auth/assertion-exchange (StudyAtrium's AuthController,
 // generic dynamic-client flow). Anonymous POST: the assertion itself is the one-time credential,
 // there's no X-Api-Key to send yet since that's exactly what this call is meant to produce.
 export async function exchangeAssertion(
