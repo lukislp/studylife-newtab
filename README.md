@@ -166,6 +166,15 @@ numbers:
   still renders with its own real, current data - only the affected panel shows its own
   "couldn't load" message.
 
+## Privacy
+
+Every new tab sends six read-only requests to your own StudyAtrium server (metrics summary, course
+goals, timer state, sessions, session history, and **all notes with their full text**); nothing is
+cached locally and nothing goes anywhere else. The API key is stored as plain text in the
+extension storage of your browser profile. Details, the exact request list, and how to delete the
+data: [PRIVACY.md](PRIVACY.md). Controller: the operator of your instance. Publisher: see the
+imprint at <https://lktec.org/impressum>.
+
 ## Security
 
 Every release is built by this repository's own CI, keylessly signed with
@@ -180,3 +189,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## License
 
 [AGPL-3.0](LICENSE).
+
